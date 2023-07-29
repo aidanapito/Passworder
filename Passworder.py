@@ -35,14 +35,14 @@ else:
     print('Password is not strong enough, here is a better one:')
 
     #enter characters elible to be in password
-    chars ='abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()?'
+    chars = capletters + lowerletters + numbers + othercharacters
 
     password= ''
 
     #generate random password 20 characters long!
     for x in range(20):
         password += random.choice(chars)
-
+    
     print(password)
          
 
