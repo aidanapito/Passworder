@@ -1,50 +1,23 @@
+from flask import Flask, request, jsonify
 import random
+import string
 
-#now check strength
-password = input('Check if your password is strong: ')
+app = Flask(__name__)
 
-capletters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-lowerletters = 'abcdefghijklmnopqrstuvwxyz'
-numbers = '1234567890'
-othercharacters = '!@#$%^&*()?'
+@app.route('/generate_password', methods=['GET'])
+def generate_password():
+    length = int(request.args.get('length', 20))
+    all_chars = string.ascii_letters + string.digits + '!@#$%^&*()?'
+    new_password = ''.join(random.choice(all_chars) for _ in range(length))
+    return jsonify({'password': new_password})
 
+@app.route('/check_password_strength', methods=['POST'])
+def check_password_strength():
+    data = request.get_json()
+    password = data.get('password', '')
+    # Implement password strength checking logic here
+    is_strong = True  # Replace with actual implementation
+    return jsonify({'is_strong': is_strong})
 
-#establish chars at 0
-c,l,n,o = 0,0,0,0
-
-
-#check for character variety
-if(len(password) >= 10):
-    for i in password:
-        if (i in capletters):
-            c+=1
-        if (i in lowerletters):
-            l+=1
-        if (i in numbers):
-            n+=1
-        if (i in othercharacters):
-            o+=1
-
-
-#outputs
-if ( c>= 1 and l >= 1 and n >= 1 and o>= 1
-    and c+l+n+o == len(password)):
-    print('Password is Strong')
-
-else:
-    print('Password is not strong enough, here is a better one:')
-
-    #enter characters elible to be in password
-    chars = capletters + lowerletters + numbers + othercharacters
-
-    password= ''
-
-    #generate random password 20 characters long!
-    for x in range(20):
-        password += random.choice(chars)
-    
-    print(password)
-         
-
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
